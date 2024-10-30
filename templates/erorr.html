@@ -1,0 +1,20 @@
+<body>
+    <div class="container text-center mt-5">
+        <h1>Word Not Found</h1>
+        <p>We couldn't find the word <strong>{{ word }}</strong>.</p>
+        
+        {% if suggestions %}
+            <p>Did you mean:</p>
+            <ul class="list-unstyled">
+                {% for suggestion in suggestions %}
+                    <li><a href="{{ url_for('detail', keyword=suggestion) }}">{{ suggestion }}</a></li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No similar words were found.</p>
+        {% endif %}
+        
+        <a href="/" class="btn btn-primary mt-4">Back to Home</a>
+    </div>
+</body>
+</html>
