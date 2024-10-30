@@ -39,30 +39,27 @@ def main():
 
 @app.route('/detail/<keyword>')
 def detail(keyword):
-    api_key = "c7043f07-d22c-44cd-88b8-7216a8dcb503"
+    api_key = 'c7043f07-d22c-44cd-88b8-7216a8dcb503'
     url = f'https://www.dictionaryapi.com/api/v3/references/collegiate/json/{keyword}?key={api_key}'
     response = requests.get(url)
     definitions = response.json()
 
     if not definitions:
-        return redirect(url_for(
-            'main',
-            msg=f'Could not find the word, "{keyword}"'
-         ))
+        return render_template('erorr.html', word=keyword)
+    
 
-    if type(definitions[0]) is str:
-        # suggestions = ','.join(definitions)
-        return redirect(url_for(
-            'main',
-            msg=f'Could not find the word, "{keyword}", did you mean one of these words {", ".join(definitions)}?'
-        ))
+    if isinstance(definitions[0], str):
+        suggestions = definitions
+        return render_template('erorr.html', word=keyword, suggestions=suggestions)
+
 
     status = request.args.get('status_give', 'new')
-    return render_template('detail.html', 
-                           word=keyword,
-                           definitions = definitions,
-                           status = status
-                           )
+    return render_template(
+        'detail.html',
+        word=keyword,
+        definitions=definitions,
+        status=status
+    )
 
 @app.route('/api/save_word', methods= ['POST'])
 def save_word():
